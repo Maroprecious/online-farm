@@ -4,15 +4,16 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-import Select from 'react-select';
+import Select from "react-select";
 
+import { BulkCards, RetailCards, Center } from "./tabs.styles.jsx";
 
 import { useEffect, useState } from "react";
 import BulkData from "../../bulk-food.json";
-import BulkOne from '../../components/bulk-buy/bulk-buy.component';
-import RetailBuy from '../../components/retail-buy/retail-buy.component';
+import BulkOne from "../../components/bulk-buy/bulk-buy.component";
+import RetailBuy from "../../components/retail-buy/retail-buy.component";
 
-import './tabs.styles.scss'
+import "./tabs.styles.scss";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,7 +45,7 @@ function a11yProps(index) {
 export default function BasicTabs() {
   const techCompanies = [
     { label: "Price high to low", value: 1 },
-    { label: "Price low to high", value: 2 }
+    { label: "Price low to high", value: 2 },
   ];
   const [value, setValue] = React.useState(0);
 
@@ -55,31 +56,28 @@ export default function BasicTabs() {
   const [num, setNum] = useState(12);
 
   const filteredFunction = () => {
-    
-    if(filteredItems === "Price low to high"){
-    const lowToHigh = BulkData.sort((a, b) => a.price - b.price )
-    setAllProducts(lowToHigh);
-    console.log("low to high", lowToHigh);
-    }else{
-    const highToLow = BulkData.sort((a, b) => b.price - a.price )
-    setAllProducts(highToLow); 
-    console.log("high to low", highToLow);
-
+    if (filteredItems === "Price low to high") {
+      const lowToHigh = BulkData.sort((a, b) => a.price - b.price);
+      setAllProducts(lowToHigh);
+      console.log("low to high", lowToHigh);
+    } else {
+      const highToLow = BulkData.sort((a, b) => b.price - a.price);
+      setAllProducts(highToLow);
+      console.log("high to low", highToLow);
     }
-
-  }
+  };
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   const loadMore = () => {
     setNum(num + 4);
-  }
+  };
 
   useEffect(() => {
     filteredFunction();
-  }, [filteredItems])
-  
+  }, [filteredItems]);
+
   useEffect(() => {
     const filteredBulkBuy = allProducts.filter(
       (element) => element.type === "bulk buy"
@@ -99,44 +97,55 @@ export default function BasicTabs() {
   // }, [])
   return (
     <Box sx={{ width: "100%" }}>
-      <Box className="tabs-head" sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box
+        className="tabs-head"
+        sx={{ borderBottom: 1, borderColor: "divider" }}
+      >
         <Tabs
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
-          
         >
           <Tab label="Bulk buy" {...a11yProps(0)} />
           <Tab label="Retail buy" {...a11yProps(1)} />
-
-          
-        
         </Tabs>
-        <div  className="tab-select">
-        <Select className="select" options={ techCompanies } onChange = {(e) => setFilteredItems(e.label)}/>
-
-          </div>
+        <div className="tab-select">
+          <Select
+            className="select"
+            options={techCompanies}
+            onChange={(e) => setFilteredItems(e.label)}
+          />
+        </div>
       </Box>
-      <TabPanel value={value} index={0}>
-       <div className="bulk-cards">
-       {bulkBuy
-        .filter((_, bulkInfo) => bulkInfo < num)
-        .map((bulkInfo) => (
-            <BulkOne bulkInfo = {bulkInfo} key={bulkInfo.id}/>
-          
-        ))}
-       </div>
-      <button onClick={() => loadMore()}> load more</button>
+      <TabPanel className="center" value={value} index={0}>
+        <BulkCards>
+          {bulkBuy
+            .filter((_, bulkInfo) => bulkInfo < num)
+            .map((bulkInfo) => (
+              <BulkOne bulkInfo={bulkInfo} key={bulkInfo.id} />
+            ))}
+        </BulkCards>
+        <Center>
+        <button className="button button-1" onClick={() => loadMore()}>
+          {" "}
+          LOAD MORE
+        </button>
+        </Center>
       </TabPanel>
       <TabPanel value={value} index={1}>
-      <div className="retail-cards">
-      {retailBuy
-        .filter((_, retailInfo) => retailInfo < num)
-        .map((retailInfo) => (
-          <RetailBuy retailInfo={retailInfo} key={retailInfo.id} />
-        ))}
-      </div>
-      <button onClick={() => loadMore()}> load more</button>
+        <RetailCards>
+          {retailBuy
+            .filter((_, retailInfo) => retailInfo < num)
+            .map((retailInfo) => (
+              <RetailBuy retailInfo={retailInfo} key={retailInfo.id} />
+            ))}
+        </RetailCards>
+        <Center>
+          <button className="button button-1" onClick={() => loadMore()}>
+            {" "}
+            LOAD MORE
+          </button>
+        </Center>
       </TabPanel>
     </Box>
   );

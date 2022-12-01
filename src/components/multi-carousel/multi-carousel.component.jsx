@@ -38,7 +38,7 @@ const Responsive = () => {
        <TopFoodContainer>
        <h2> Top selling products </h2>
        <Carousel responsive={responsive}>
-       {foodProducts.filter((_, idx) => idx < 9).map((product) => (
+       {foodProducts.filter((_, idx) => idx < 7).map((product) => (
          <ProductCard key={product.id} product={product} />
        ))}
      </Carousel>
